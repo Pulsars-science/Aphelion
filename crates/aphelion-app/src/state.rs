@@ -5,10 +5,15 @@
 
 use aphelion_core::constants::{DAY, YEAR};
 use aphelion_core::{BodyId, DVec3, Integrator, Simulation};
-use aphelion_gfx::{OrbitCamera, Scene};
+use aphelion_gfx::{OrbitCamera, RadiusScale, Scene, display_radius};
 
 /// Everything the user can change that is not a law of physics.
+///
+/// The booleans really are independent toggles rather than a state machine in
+/// disguise — every combination of them is meaningful — so clippy's advice to
+/// collapse them into an enum would lose information rather than add any.
 #[derive(Debug, Clone, Copy)]
+#[allow(clippy::struct_excessive_bools)]
 pub struct Controls {
     /// Whether time is stopped.
     pub paused: bool,
@@ -36,6 +41,12 @@ pub struct Controls {
     /// Display-only exaggeration of every body's radius.
     pub radius_scale: f64,
 
+    /// Whether an exaggerated body is held clear of the nearest orbit.
+    ///
+    /// Off, a factor of 1000 makes the Sun 4.6 AU across and the inner system
+    /// disappears inside it. See [`RadiusScale::clamp_to_orbits`].
+    pub clamp_body_size: bool,
+
     /// Whether to draw orbit tracks.
     pub show_orbits: bool,
 
@@ -58,6 +69,7 @@ impl Default for Controls {
             // orbit. A thousandfold makes the planets legible while leaving the
             // orbits where they belong.
             radius_scale: 1000.0,
+            clamp_body_size: true,
             show_orbits: true,
             focus: None,
             follow: true,
@@ -155,15 +167,24 @@ impl AppState {
             return;
         };
 
-        let radius = self.sim.body(id).map_or(1e6, |b| b.radius);
+        // Frame against the radius actually drawn, not the true one, or the
+        // camera's floor would let the viewer inside an exaggerated planet.
+        let radius = display_radius(&self.sim, id, self.radius_scale()).max(1.0);
         let centre = self.sim.position(id);
         // Keep the current distance if the user has already zoomed to something
         // they like; only reframe when it makes no sense for the new target.
         let previous = self.camera.distance;
-        self.camera
-            .frame_body(centre, radius * self.controls.radius_scale.max(1.0));
+        self.camera.frame_body(centre, radius);
         if previous > self.camera.min_distance * 4.0 {
             self.camera.distance = previous.min(self.camera.max_distance);
+        }
+    }
+
+    /// How body radii are currently drawn.
+    pub fn radius_scale(&self) -> RadiusScale {
+        RadiusScale {
+            factor: self.controls.radius_scale,
+            clamp_to_orbits: self.controls.clamp_body_size,
         }
     }
 
@@ -226,7 +247,8 @@ impl AppState {
 
     /// Repopulates the render scene from the current simulation state.
     pub fn rebuild_scene(&mut self) {
-        self.scene.build_from(&self.sim, self.controls.radius_scale);
+        let scale = self.radius_scale();
+        self.scene.build_from(&self.sim, scale);
         if self.controls.show_orbits {
             self.scene.add_orbit_tracks(&self.sim, 256, 0.35);
         }

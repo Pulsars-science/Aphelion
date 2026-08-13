@@ -217,6 +217,23 @@ fn display_section(ui: &mut egui::Ui, state: &mut AppState) {
         state.focus_on(focus);
     }
 
+    if ui
+        .checkbox(
+            &mut state.controls.clamp_body_size,
+            "keep bodies inside their orbits",
+        )
+        .on_hover_text(
+            "The Sun is 109 times the Earth's radius, so a factor large enough \
+             to make the planets visible makes the Sun 4.6 AU across and hides \
+             the inner system inside it. This holds each body clear of the \
+             nearest orbit; the planets are unaffected.",
+        )
+        .changed()
+    {
+        let focus = state.controls.focus;
+        state.focus_on(focus);
+    }
+
     ui.checkbox(&mut state.controls.show_orbits, "orbit tracks");
     ui.checkbox(&mut state.controls.follow, "camera follows focus");
     ui.add(egui::Slider::new(&mut state.scene.ambient, 0.0..=0.4).text("night-side light"));

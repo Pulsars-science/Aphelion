@@ -36,4 +36,4 @@ pub mod scene;
 pub use camera::{Camera, OrbitCamera, RENDER_UNIT};
 pub use mesh::{MeshData, Vertex, uv_sphere};
 pub use renderer::{DEPTH_FORMAT, Frame, Renderer};
-pub use scene::{BodyInstance, Scene, Track};
+pub use scene::{BodyInstance, RadiusScale, Scene, Track, display_radius};
