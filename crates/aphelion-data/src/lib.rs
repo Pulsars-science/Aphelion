@@ -1,6 +1,6 @@
 //! Ready-made systems for [Aphelion].
 //!
-//! The headline one is [`solar_system`]: the Sun, the eight planets, the Moon
+//! The headline one is [`solar_system()`]: the Sun, the eight planets, the Moon
 //! and Pluto, placed on their J2000.0 orbits.
 //!
 //! [Aphelion]: https://github.com/Pulsars-science/Aphelion

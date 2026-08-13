@@ -3,7 +3,7 @@
 //! A [`Scene`] is a plain description handed to the renderer each frame: world
 //! positions in metres, radii in metres, colours in linear RGB. Nothing here
 //! knows about wgpu, and nothing here is retained between frames — building one
-//! from a [`Simulation`](aphelion_core::Simulation) is cheap.
+//! from a [`Simulation`] is cheap.
 
 use aphelion_core::{Body, BodyId, DVec3, Simulation};
 
