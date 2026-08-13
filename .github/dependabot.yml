@@ -1,0 +1,24 @@
+version: 2
+updates:
+  - package-ecosystem: cargo
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      # wgpu, winit and egui move together and must stay compatible; updating
+      # one at a time produces pull requests that cannot compile.
+      graphics-stack:
+        patterns:
+          - "wgpu*"
+          - "winit"
+          - "egui*"
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: monthly

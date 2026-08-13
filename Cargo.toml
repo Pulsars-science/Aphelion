@@ -1,0 +1,44 @@
+[workspace]
+resolver = "3"
+members = ["crates/*"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.90"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/Pulsars-science/Aphelion"
+homepage = "https://github.com/Pulsars-science/Aphelion"
+authors = ["The Aphelion contributors"]
+keywords = ["astronomy", "n-body", "orbital-mechanics", "simulation", "wgpu"]
+categories = ["science", "simulation", "graphics"]
+
+[workspace.dependencies]
+aphelion-core = { path = "crates/aphelion-core", version = "0.1.0" }
+aphelion-data = { path = "crates/aphelion-data", version = "0.1.0" }
+aphelion-gfx = { path = "crates/aphelion-gfx", version = "0.1.0" }
+
+glam = "0.33"
+wgpu = "30.0"
+winit = "0.30"
+egui = "0.36"
+egui-wgpu = "0.36"
+egui-winit = { version = "0.36", default-features = false }
+bytemuck = { version = "1.25", features = ["derive"] }
+pollster = "1.0"
+log = "0.4"
+env_logger = "0.11"
+anyhow = "1.0"
+
+# A debug build that is unusably slow is a debug build nobody uses. Optimising
+# dependencies (wgpu, naga, egui) while keeping our own crates at -O1 keeps
+# compile times reasonable and the simulation real-time.
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.release]
+lto = "thin"
+codegen-units = 1

@@ -1,0 +1,32 @@
+[package]
+name = "aphelion-app"
+description = "Aphelion: an interactive, physically real 3D solar system simulator"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+authors.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[[bin]]
+name = "aphelion"
+path = "src/main.rs"
+
+[dependencies]
+aphelion-core.workspace = true
+aphelion-data.workspace = true
+aphelion-gfx.workspace = true
+
+wgpu.workspace = true
+winit.workspace = true
+egui.workspace = true
+egui-wgpu.workspace = true
+egui-winit.workspace = true
+glam.workspace = true
+pollster.workspace = true
+anyhow.workspace = true
+log.workspace = true
+env_logger.workspace = true

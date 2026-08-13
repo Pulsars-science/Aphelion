@@ -1,0 +1,21 @@
+# Rust build artefacts
+/target/
+**/*.rs.bk
+
+# Cargo.lock is committed: this workspace produces a binary, and pinning the
+# dependency graph is what makes a CI failure reproducible locally.
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Profiling and traces
+perf.data*
+flamegraph.svg
+*.wgpu-trace/

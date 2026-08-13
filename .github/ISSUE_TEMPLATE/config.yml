@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Questions and ideas
+    url: https://github.com/Pulsars-science/Aphelion/discussions
+    about: For anything that is not a bug report or a concrete proposal.
