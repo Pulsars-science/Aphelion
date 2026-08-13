@@ -33,11 +33,13 @@
 pub mod body;
 pub mod constants;
 pub mod integrator;
+pub mod kepler;
 pub mod nbody;
 pub mod params;
 
 pub use body::{Body, BodyId, BodyKind};
 pub use integrator::{Integrator, Scratch};
+pub use kepler::OrbitalElements;
 pub use nbody::State;
 pub use params::SimulationParams;
 
