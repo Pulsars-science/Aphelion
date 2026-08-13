@@ -36,11 +36,13 @@ pub mod integrator;
 pub mod kepler;
 pub mod nbody;
 pub mod params;
+pub mod time;
 
 pub use body::{Body, BodyId, BodyKind};
 pub use integrator::{Integrator, Scratch};
 pub use kepler::OrbitalElements;
 pub use nbody::State;
 pub use params::SimulationParams;
+pub use time::Epoch;
 
 pub use glam::DVec3;
