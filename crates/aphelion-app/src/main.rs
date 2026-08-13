@@ -193,13 +193,39 @@ impl Application {
             .tessellate(output.shapes, output.pixels_per_point);
 
         // --- Draw -------------------------------------------------------
+        // egui's texture upkeep has to happen whether or not this frame ever
+        // reaches the screen. The font atlas is allocated once and then patched
+        // incrementally, so dropping a single frame's deltas leaves the *next*
+        // frame patching a texture that was never created — which panics inside
+        // egui-wgpu. Skipped frames are routine (a window that opens behind
+        // another one reports Occluded), so this must not depend on acquiring
+        // the surface. Uploading before begin_frame makes that structural.
+        //
+        // One texture can receive several partial updates in a frame — the font
+        // atlas growing mid-layout, for instance — hence the inner loop.
+        for (id, deltas) in &output.textures_delta.set {
+            for delta in deltas {
+                graphics.egui_renderer.update_texture(
+                    graphics.renderer.device(),
+                    graphics.renderer.queue(),
+                    *id,
+                    delta,
+                );
+            }
+        }
+
         let mut frame = match graphics.renderer.begin_frame() {
             Ok(frame) => frame,
             Err(error) => {
-                // A lost or outdated swap chain is routine — during a resize,
-                // a monitor change, a GPU reset. Skip the frame and carry on.
+                // A lost, outdated or occluded swap chain is routine — during a
+                // resize, a monitor change, a window opening behind another.
+                // Skip the frame and carry on, but still retire the textures
+                // egui has finished with.
                 log::debug!("skipping frame: {error:#}");
                 graphics.renderer.reconfigure();
+                for id in &output.textures_delta.free {
+                    graphics.egui_renderer.free_texture(id);
+                }
                 return false;
             }
         };
@@ -213,18 +239,6 @@ impl Application {
             size_in_pixels: [width, height],
             pixels_per_point: output.pixels_per_point,
         };
-        // One texture can receive several partial updates in a frame (the font
-        // atlas growing mid-layout, for instance), so each entry is a list.
-        for (id, deltas) in &output.textures_delta.set {
-            for delta in deltas {
-                graphics.egui_renderer.update_texture(
-                    graphics.renderer.device(),
-                    graphics.renderer.queue(),
-                    *id,
-                    delta,
-                );
-            }
-        }
         graphics.egui_renderer.update_buffers(
             graphics.renderer.device(),
             graphics.renderer.queue(),
