@@ -1,6 +1,15 @@
 [workspace]
 resolver = "3"
-members = ["crates/*"]
+# Listed explicitly rather than globbed as "crates/*". A glob matches anything
+# that appears under crates/, so a stray directory — a sync client's "aphelion-app 2",
+# a half-deleted experiment — breaks the build of every crate with an error
+# about a manifest that was never meant to exist.
+members = [
+    "crates/aphelion-core",
+    "crates/aphelion-data",
+    "crates/aphelion-gfx",
+    "crates/aphelion-app",
+]
 
 [workspace.package]
 version = "0.1.0"
