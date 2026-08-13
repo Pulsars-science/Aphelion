@@ -1,0 +1,23 @@
+[package]
+name = "aphelion-gfx"
+description = "wgpu renderer for the Aphelion astronomy simulator: astronomical-scale 3D with camera-relative precision"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+homepage.workspace = true
+authors.workspace = true
+keywords.workspace = true
+categories.workspace = true
+
+[dependencies]
+aphelion-core.workspace = true
+glam.workspace = true
+wgpu.workspace = true
+bytemuck.workspace = true
+anyhow.workspace = true
+log.workspace = true
+
+[dev-dependencies]
+aphelion-data.workspace = true
