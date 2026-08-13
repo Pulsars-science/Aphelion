@@ -11,8 +11,9 @@
 //! * a **reverse-Z projection with an infinite far plane**, which spreads depth
 //!   precision evenly across every scale.
 //!
-//! Nothing here depends on a windowing library, so the same code can drive a
-//! desktop window today and a canvas later.
+//! Nothing here depends on a windowing library: [`Renderer::new`] takes any
+//! wgpu surface target, so the same code can drive a desktop window today and a
+//! canvas later.
 //!
 //! [Aphelion]: https://github.com/Pulsars-science/Aphelion
 
@@ -29,8 +30,10 @@
 
 pub mod camera;
 pub mod mesh;
+pub mod renderer;
 pub mod scene;
 
 pub use camera::{Camera, OrbitCamera, RENDER_UNIT};
 pub use mesh::{MeshData, Vertex, uv_sphere};
+pub use renderer::{DEPTH_FORMAT, Frame, Renderer};
 pub use scene::{BodyInstance, Scene, Track};
