@@ -22,3 +22,14 @@ updates:
     directory: "/"
     schedule:
       interval: monthly
+    groups:
+      actions:
+        patterns:
+          - "*"
+    ignore:
+      # This action's tags are Rust versions, not action releases, so a bump
+      # here means "use a different compiler" — and Dependabot has no idea
+      # which ones exist. It once proposed Rust 1.100.0. The MSRV job now
+      # passes the version as an input read from Cargo.toml, so nothing should
+      # reference a version tag; this is the belt to that pair of braces.
+      - dependency-name: dtolnay/rust-toolchain

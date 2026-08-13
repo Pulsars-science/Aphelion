@@ -73,6 +73,12 @@ cargo test --workspace
 CI runs exactly these on Linux, macOS and Windows, plus a docs build. The
 workspace is currently warning-free; please keep it that way.
 
+### The minimum supported Rust version
+
+The MSRV lives in one place: `rust-version` in the workspace `Cargo.toml`. CI
+reads it from there, so raising it is a one-line change. Do not repeat it in the
+workflow.
+
 ### Commit messages
 
 [Conventional Commits](https://www.conventionalcommits.org/):
