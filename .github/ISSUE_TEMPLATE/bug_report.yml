@@ -1,0 +1,77 @@
+name: Bug report
+description: Something behaves incorrectly
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report this.
+
+        A simulation producing physically wrong results counts as a bug and is
+        very much worth reporting — please include the parameters you had set.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What did you do, what happened, and what did you expect instead?
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Focus Jupiter
+        2. Set its mass to 50x
+        3. Wind the time scale to 1 year/s
+        4. ...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Physics / simulation results
+        - Rendering
+        - User interface
+        - Performance
+        - Build / installation
+        - Not sure
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: A release tag, or the commit you built from.
+      placeholder: v0.1.0 or 3f2a1b9
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: |
+        OS, GPU, and `rustc --version`.
+
+        For rendering problems, the first few lines of
+        `RUST_LOG=aphelion=debug,wgpu=warn cargo run --release` name the adapter
+        and backend — please paste them.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: physics-state
+    attributes:
+      label: Simulation state (for physics issues)
+      description: |
+        Integrator, steps per orbit, gravity and mass scales, softening, and
+        the energy drift the panel reported.
+      render: text

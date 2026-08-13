@@ -1,0 +1,53 @@
+name: Feature request
+description: Suggest a capability or an improvement
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The [roadmap](https://github.com/Pulsars-science/Aphelion#roadmap) lists
+        what is already planned — if your idea is on it, an issue saying you
+        want to work on it is very welcome.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the need, not just the solution you have in mind.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like to happen?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Physics / simulation
+        - Rendering
+        - User interface
+        - Body data / scenarios
+        - Tooling, docs or CI
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: References
+      description: |
+        For physics or data proposals, a paper, a JPL page or an IAU report
+        makes the change far easier to land.
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: Would you like to implement this?
+      options:
+        - label: I would be willing to work on it
