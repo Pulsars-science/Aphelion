@@ -32,7 +32,9 @@
 
 pub mod body;
 pub mod constants;
+pub mod params;
 
 pub use body::{Body, BodyId, BodyKind};
+pub use params::SimulationParams;
 
 pub use glam::DVec3;
