@@ -16,10 +16,15 @@ use crate::state::AppState;
 pub fn draw(root: &mut egui::Ui, state: &mut AppState, fps: f64) -> bool {
     let mut quit = false;
 
+    // Copied out and written back because the closure below also needs `state`
+    // mutably, and egui wants the flag by &mut so that dragging the resize edge
+    // past the minimum can close the panel by itself.
+    let mut open = state.controls.panel_open;
+
     egui::Panel::left("controls")
         .resizable(true)
         .default_size(320.0)
-        .show(root, |ui| {
+        .show_collapsible(root, &mut open, |ui| {
             egui::ScrollArea::vertical().show(ui, |ui| {
                 ui.heading("Aphelion");
                 ui.label(
@@ -51,13 +56,27 @@ pub fn draw(root: &mut egui::Ui, state: &mut AppState, fps: f64) -> bool {
                 ui.add_space(4.0);
                 ui.label(
                     egui::RichText::new(
-                        "drag: orbit · wheel: zoom · space: pause · [ ]: time · o: orbits",
+                        "drag: orbit · wheel: zoom · space: pause · [ ]: time · o: orbits · tab: panel",
                     )
                     .small()
                     .weak(),
                 );
             });
         });
+
+    state.controls.panel_open = open;
+
+    // Closed, the panel leaves only a thin grab handle, which is easy to miss.
+    // A labelled button in the corner says the interface is still there.
+    if !state.controls.panel_open {
+        egui::Area::new("reopen".into())
+            .fixed_pos(egui::pos2(8.0, 8.0))
+            .show(root.ctx(), |ui| {
+                if ui.button("▸ controls").on_hover_text("Tab").clicked() {
+                    state.controls.panel_open = true;
+                }
+            });
+    }
 
     quit
 }

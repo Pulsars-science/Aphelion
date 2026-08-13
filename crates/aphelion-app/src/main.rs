@@ -140,6 +140,9 @@ impl Application {
         match key.as_ref() {
             Key::Named(NamedKey::Space) => state.controls.paused = !state.controls.paused,
             Key::Named(NamedKey::Escape) => event_loop.exit(),
+            Key::Named(NamedKey::Tab) => {
+                state.controls.panel_open = !state.controls.panel_open;
+            }
             Key::Character("[") => state.scale_time(0.5),
             Key::Character("]") => state.scale_time(2.0),
             Key::Character("o") => state.controls.show_orbits = !state.controls.show_orbits,

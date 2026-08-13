@@ -47,6 +47,9 @@ pub struct Controls {
     /// disappears inside it. See [`RadiusScale::clamp_to_orbits`].
     pub clamp_body_size: bool,
 
+    /// Whether the control panel is open.
+    pub panel_open: bool,
+
     /// Whether to draw orbit tracks.
     pub show_orbits: bool,
 
@@ -70,6 +73,7 @@ impl Default for Controls {
             // orbits where they belong.
             radius_scale: 1000.0,
             clamp_body_size: true,
+            panel_open: true,
             show_orbits: true,
             focus: None,
             follow: true,
