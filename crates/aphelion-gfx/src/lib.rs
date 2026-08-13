@@ -29,6 +29,8 @@
 
 pub mod camera;
 pub mod mesh;
+pub mod scene;
 
 pub use camera::{Camera, OrbitCamera, RENDER_UNIT};
 pub use mesh::{MeshData, Vertex, uv_sphere};
+pub use scene::{BodyInstance, Scene, Track};
