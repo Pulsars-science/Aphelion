@@ -30,6 +30,9 @@
 #![allow(clippy::similar_names)]
 #![allow(clippy::cast_precision_loss)]
 
+pub mod body;
 pub mod constants;
+
+pub use body::{Body, BodyId, BodyKind};
 
 pub use glam::DVec3;
