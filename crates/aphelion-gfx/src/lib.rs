@@ -28,5 +28,7 @@
 #![allow(clippy::too_many_lines)]
 
 pub mod camera;
+pub mod mesh;
 
 pub use camera::{Camera, OrbitCamera, RENDER_UNIT};
+pub use mesh::{MeshData, Vertex, uv_sphere};
