@@ -20,13 +20,30 @@ pub fn draw(root: &mut egui::Ui, state: &mut AppState, fps: f64) -> bool {
     // mutably, and egui wants the flag by &mut so that dragging the resize edge
     // past the minimum can close the panel by itself.
     let mut open = state.controls.panel_open;
+    // The collapse button lives inside the panel, whose closure cannot also
+    // touch `open` — egui is holding it. So it raises a flag instead.
+    let mut collapse = false;
 
     egui::Panel::left("controls")
         .resizable(true)
         .default_size(320.0)
+        // No grab handle on the collapsed panel: the button below sits in that
+        // corner, and two overlapping ways to reopen it is one too many.
+        .drag_to_open(false)
         .show_collapsible(root, &mut open, |ui| {
             egui::ScrollArea::vertical().show(ui, |ui| {
-                ui.heading("Aphelion");
+                ui.horizontal(|ui| {
+                    ui.heading("Aphelion");
+                    ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                        if ui
+                            .button("◀")
+                            .on_hover_text("Hide the panel  (Tab)")
+                            .clicked()
+                        {
+                            collapse = true;
+                        }
+                    });
+                });
                 ui.label(
                     egui::RichText::new(format!(
                         "{}  ·  {fps:.0} fps",
@@ -64,15 +81,19 @@ pub fn draw(root: &mut egui::Ui, state: &mut AppState, fps: f64) -> bool {
             });
         });
 
-    state.controls.panel_open = open;
+    state.controls.panel_open = open && !collapse;
 
-    // Closed, the panel leaves only a thin grab handle, which is easy to miss.
-    // A labelled button in the corner says the interface is still there.
+    // The other half of the toggle, in the same corner the ◀ button vacated, so
+    // hiding and showing read as one control rather than two.
     if !state.controls.panel_open {
-        egui::Area::new("reopen".into())
+        egui::Area::new("show panel".into())
             .fixed_pos(egui::pos2(8.0, 8.0))
             .show(root.ctx(), |ui| {
-                if ui.button("▸ controls").on_hover_text("Tab").clicked() {
+                if ui
+                    .button("▶  Controls")
+                    .on_hover_text("Show the panel  (Tab)")
+                    .clicked()
+                {
                     state.controls.panel_open = true;
                 }
             });
